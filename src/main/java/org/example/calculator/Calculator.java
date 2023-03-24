@@ -1,3 +1,8 @@
+package org.example.calculator;
+
+import org.example.operation.AddOperation;
+import org.example.operation.Operation;
+
 import java.util.Stack;
 
 public class Calculator {
@@ -13,18 +18,7 @@ public class Calculator {
     }
 
     public double add(double value) {
-        Operation operation = new Operation() {
-            @Override
-            public void undo() {
-                currentValue -= value;
-            }
-
-            @Override
-            public void redo() {
-                currentValue += value;
-            }
-        };
-
+        Operation operation = AddOperation.getInstance(this, value);
         operation.redo();
         undoStack.push(operation);
         redoStack.clear();
@@ -101,5 +95,9 @@ public class Calculator {
 
     public double getCurrentValue() {
         return currentValue;
+    }
+
+    public void setCurrentValue(double currentValue) {
+        this.currentValue = currentValue;
     }
 }

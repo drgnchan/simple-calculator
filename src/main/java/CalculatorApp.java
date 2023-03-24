@@ -1,3 +1,5 @@
+import org.example.calculator.Calculator;
+
 import java.util.Scanner;
 
 public class CalculatorApp {
