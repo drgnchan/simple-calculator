@@ -2,27 +2,12 @@ package org.example.operation;
 
 import org.example.calculator.Calculator;
 
-public class AddOperation implements Operation {
+public class AddOperation extends AbstractOperation {
 
-    private double value;
-    private Calculator calculator;
-
-
-    private AddOperation(Calculator calculator, double value) {
-        this.value = value;
-        this.calculator = calculator;
+    AddOperation(Calculator calculator, double value) {
+        super(calculator, value);
     }
 
-    public static Operation getInstance(Calculator calculator, double value) {
-        AddOperation add = new AddOperation(calculator, value);
-        return add;
-
-    }
-
-    @Override
-    public void undo() {
-        calculator.setCurrentValue(calculator.getCurrentValue() - value);
-    }
 
     @Override
     public void redo() {

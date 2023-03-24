@@ -1,7 +1,6 @@
 package org.example.calculator;
 
-import org.example.operation.AddOperation;
-import org.example.operation.Operation;
+import org.example.operation.*;
 
 import java.util.Stack;
 
@@ -18,11 +17,7 @@ public class Calculator {
     }
 
     public double add(double value) {
-        Operation operation = AddOperation.getInstance(this, value);
-        operation.redo();
-        undoStack.push(operation);
-        redoStack.clear();
-        return currentValue;
+        return doOperation(AddOperation.class, value);
     }
 
     public double subtract(double value) {
@@ -30,43 +25,16 @@ public class Calculator {
     }
 
     public double multiply(double value) {
-        double oldValue = currentValue;
-        Operation operation = new Operation() {
-            @Override
-            public void undo() {
-                currentValue = oldValue;
-            }
-
-            @Override
-            public void redo() {
-                currentValue *= value;
-            }
-        };
-
-        operation.redo();
-        undoStack.push(operation);
-        redoStack.clear();
-        return currentValue;
+        return doOperation(MultiplyOperation.class, value);
     }
 
 
     public double divide(double value) {
-        if (value == 0) {
-            throw new IllegalArgumentException("不能除以0");
-        }
-        double oldValue = currentValue;
-        Operation operation = new Operation() {
-            @Override
-            public void undo() {
-                currentValue = oldValue;
-            }
+        return doOperation(DivideOperation.class, value);
+    }
 
-            @Override
-            public void redo() {
-                currentValue /= value;
-            }
-        };
-
+    private double doOperation(Class<? extends AbstractOperation> operationClazz, double value) {
+        Operation operation = OperationFactory.getInstance(operationClazz, this, value);
         operation.redo();
         undoStack.push(operation);
         redoStack.clear();
